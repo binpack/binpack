@@ -27,6 +27,8 @@ meta:
   author:       liaohuqiu@gmail.com
 
 #multiple language
+language_default: 'en'
+
 languages:      ["en", "cn"]
 
 navigation:
@@ -57,7 +59,6 @@ right_nav:
 analytics:
   google:
     account:    UA-43024238-3
-
 
 # other informations about this project
 download:
