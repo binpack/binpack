@@ -1,5 +1,6 @@
 <header class="navbar navbar-static-top bs-docs-nav" role="banner">
     <div class="container">
+        {% assign nav = site.navigation[site.lang] %}
         <div class="navbar-header">
             <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -7,21 +8,22 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/" class="navbar-brand">{{ site.navigation.name }}</a>
+            <a href="{{ site.baseurl }}" class="navbar-brand">{{ nav.title }}</a>
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">
-                {% for item in site.navigation.left %}
+                {% for item in nav.items %}
                 <li{% if page.path == item.path %} class="active"{% endif %}>
-                <a href="/{{ item.path }}">{{ item.title }}</a>
+                <a href="{{ site.baseurl }}{{ item.path }}">{{ item.title }}</a>
                 </li>
                 {% endfor %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <!--
-        <li><a href="{{ site.expo }}" onclick="_gaq.push(['_trackEvent', 'Navbar', 'Community links', 'Expo']);">Expo</a></li>
-        <li><a href="{{ site.blog }}" onclick="_gaq.push(['_trackEvent', 'Navbar', 'Community links', 'Blog']);">Blog</a></li>
-        -->
+                {% for item in site.right_nav %}
+                <li>
+                <a href="{{ item.url }}">{{ item.title }}</a>
+                </li>
+                {% endfor %}
             </ul>
         </nav>
     </div>
