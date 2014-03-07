@@ -1,66 +1,61 @@
 # Dependencies
-markdown:         redcarpet
-pygments:         true
+markdown:           redcarpet
+pygments:           true
 
 # Permalinks
-permalink:        pretty
+permalink:          pretty
 
 # Server
-host:             0.0.0.0
-port:             9001
-baseurl:          /
-url:              http://localhost:9001
-encoding:         UTF-8
+host:               0.0.0.0
+port:               9001
+baseurl:            /
+url:                http://localhost:9001
+encoding:           UTF-8
 
 # the excluded directoies
-exclude:
-  - "conf"
-  - "tools"
+exclude:            []
 
 # site information
 info:
-  site_name:    Bt-docs
+  site_name:        Bt-docs
 
 meta:
-  description:  Write beautiful bootstrap style document in a easy way.
-  keywords:     bootstrap documentation template, beautiful documentation, easy documentation
-  author:       liaohuqiu@gmail.com
+  description:      "The default description for this site"
+  keywords:         "Default keywords for this site"
+  author:           "Author information"
 
 #multiple language
-language_default: 'en'
+language_default:   'en'
 
-languages:      ["en", "cn"]
+languages:          ["en", "cn"]
 
 navigation:
   en:
-    title:    Bt-docs
-    items1:
-      - path:     /imageloader
-        title:    Image Loader
-      - path:     /request
-        title:    Network Request
+    title:          The title
+    path:           /
+    items:
+      - path:       /page1
+        title:      "Another page"
+      - path:       /page2
+        title:      "Yet another page"
   cn:
-    title:    Cube
-    items1:
-      - path:     /imageloader
-        title:    图片加载组件
-      - path:     /request
-        title:    网络请求
+    title:          "网站标题"
+    path:           /cn
+    items:
+      - path:       /cn/page1
+        title:      "页面1"
+      - path:       /cn/page2
+        title:      "页面2"
 
 right_nav:
-  - title:    English Version
-    url:      /
-  - title:    中文版文档
-    url:      /cn
-  - title:    Fork on Github
-    url:     https://github.com/liaohuqiu/bt-docs
+  - title:          English Version
+    url:            /
+  - title:          中文版文档
+    url:            /cn
+  - title:          Fork on Github
+    url:            https://github.com/liaohuqiu/bt-docs
 
-# analytics account info
+# analytics account information, remember to change this.
 analytics:
   google:
-    account:    UA-43024238-3
-
-# other informations about this project
-download:
-  rep:          https://github.com/liaohuqiu/bt-docs
-  dist:         https://github.com/liaohuqiu/bt-docs/archive/master.zip
+    account:         UA-43024238-3
