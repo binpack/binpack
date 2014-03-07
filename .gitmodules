@@ -1,3 +1,6 @@
 [submodule "_plugins/multiple-languages"]
 	path = _plugins/multiple-languages
 	url = git://github.com/screeninteraction/jekyll-multiple-languages-plugin.git
+[submodule "_plugins/jekyll-langs"]
+	path = _plugins/jekyll-langs
+	url = git@github.com:liaohuqiu/jekyll-multiple-languages.git
