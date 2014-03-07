@@ -24,12 +24,13 @@ meta:
   keywords:         "Default keywords for this site"
   author:           "Author information"
 
-#multiple language
+# multiple language
 language_default:   'en'
 
 languages:          ["en", "cn"]
 
-navigation:
+# left navigation
+left_nav:
   en:
     title:          The title
     path:           /
@@ -47,6 +48,7 @@ navigation:
       - path:       /cn/page2
         title:      "页面2"
 
+# right navigation
 right_nav:
   - title:          English Version
     url:            /
