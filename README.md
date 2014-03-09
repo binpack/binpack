@@ -1,6 +1,4 @@
-bt-docs
+binpack
 =======
 
-A bootstrap docs like document site.
-
-Please visit bt-docs.liaohuqiu.net.
+Please visit [binpack.liaohuqiu.net](binpack.liaohuqiu.net)
