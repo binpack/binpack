@@ -23,17 +23,67 @@ lead:           "Most fast, json like"
 
 #Encoding
 
+* Null, one byte.
+
+    ```
+    +-----------+
+    | 0000 1111 |
+    +-----------+
+    ```
+*   Bool, one byte.
+
+    *   `true`
+
+        ```
+        +-----------+
+        | 0000 0100 |
+        +-----------+
+        ```
+
+    *   `false`
+
+        ```
+        +-----------+
+        | 0000 0101 |
+        +-----------+
+        ```
+
+*   Integer
+
+    We encode the type of `Integer` into the first byte with its sign.
+
+    * positive
+
+        ```
+        +-----------+...........+
+        | 010x xxxx | xxxx xxxx |
+        +-----------+...........+
+        ```
+
+    * negative
+
+        ```
+        +-----------+...........+
+        | 011x xxxx | xxxx xxxx |
+        +-----------+...........+
+        ```
+
+*   String
+
+*   Float
+
+*   Blob
+
+*   List
+
+*   Dict
 
 	BIN_TYPE_CLOSURE	            = 0x01,	
 	BIN_TYPE_LIST   	            = 0x02,
 	BIN_TYPE_DICT   	            = 0x03,
-	BIN_TYPE_BOOL   	            = 0x04,     /* 0000 0100 T */
-    BIN_TYPE_BOOL_FALSE             = 0x05,     /* 0000 0101 F */
 
 	BIN_TYPE_REAL_DOUBLE            = 0x06,     /* 0010 0110   */
     BIN_TYPE_REAL_FLOAT             = 0x07,     /* 0000 0111   */
-
-	BIN_TYPE_NULL   	            = 0x0f,
 
 	BIN_TYPE_BLOB   	            = 0x10,		/* 0001 xxxx + */
 	BIN_TYPE_STRING   	            = 0x20,		/* 0010 xxxx + */
