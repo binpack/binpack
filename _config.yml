@@ -17,7 +17,7 @@ exclude:            []
 
 # site information
 info:
-  site_name:        binpack
+  site_name:        BinPack
 
 meta:
   description:      "Json like, small and most fast."
@@ -32,7 +32,7 @@ languages:          ["en", "cn"]
 # left navigation
 left_nav:
   en:
-    title:          binpack
+    title:          BinPack
     path:           /
     items1:
       - path:       /page1
