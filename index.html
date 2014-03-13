@@ -15,7 +15,7 @@
 
 <title>
   
-    binpack
+    BinPack
   
 </title>
 
@@ -63,7 +63,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="" class="navbar-brand"></a>
+            <a href="/" class="navbar-brand">BinPack</a>
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">
@@ -84,8 +84,8 @@
     <!-- Docs page layout -->
     <div class="bs-header" id="content">
       <div class="container">
-        <h1>binpack</h1>
-        <p>Json like, small, most fast.</p>
+        <h1>BinPack</h1>
+        <p>Most fast, json like</p>
       </div>
     </div>
 
@@ -93,7 +93,287 @@
 
       <div class="row">
         <div class="col-md-9" role="main">
-          
+          <h1 id="toc_0">BinPack</h1>
+
+<hr>
+
+<h3 id="toc_1">what is it</h3>
+
+<p><code>Binpack</code> is a binary serialize format, it is json like, but smaller and faster.</p>
+
+<h3 id="toc_2">Support data format</h3>
+
+<ul>
+<li>  Null</li>
+<li>  Bool</li>
+<li><p><a href="http://en.wikipedia.org/wiki/Integer_%28computer_science%29">Integer</a></p>
+
+<ul>
+<li>8 bit</li>
+<li>16 bit</li>
+<li>32 bit</li>
+<li>64 bit</li>
+</ul></li>
+<li><p>Blob</p>
+
+<ul>
+<li>Binnay Buffer</li>
+</ul></li>
+<li><p>String</p></li>
+<li><p>Float</p>
+
+<ul>
+<li>Single</li>
+<li>Double</li>
+</ul></li>
+<li><p>List</p></li>
+<li><p>Dict</p>
+
+<ul>
+<li>Dictionary</li>
+</ul></li>
+</ul>
+
+<h1 id="toc_3">Encoding</h1>
+
+<hr>
+
+<h3 id="toc_4">Null</h3>
+
+<ul>
+<li><p>Encode into one byte</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+| 0000 1111 |   0x0f
++-----------+
+</code></pre></div></li>
+</ul>
+
+<h3 id="toc_5">Bool</h3>
+
+<ul>
+<li><p><code>true</code></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+| 0000 0100 |   0x04
++-----------+
+</code></pre></div></li>
+<li><p><code>false</code></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+| 0000 0101 |   0x05
++-----------+
+</code></pre></div></li>
+</ul>
+
+<h3 id="toc_6">Integer</h3>
+
+<p>Integer will be encoded into one or more bytes.</p>
+
+<ul>
+<li><p>The last byte is used to store the type and sign information of the Integer.</p>
+
+<p>The type and sign information is encode into the first 3 bits, and the following 2 bits for data length:</p>
+
+<ul>
+<li><p><code>positive</code></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+| 010x xxxx |  0x40
++-----------+
+</code></pre></div></li>
+<li><p><code>negative</code></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+| 011x xxxx |  0x60
++-----------+
+</code></pre></div></li>
+<li><p><code>data length</code></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+| xxx0 0xxx |   64bits
++-----------+
++-----------+
+| xxx0 1xxx |   8bits
++-----------+
++-----------+
+| xxx1 0xxx |   16bits
++-----------+
++-----------+
+| xxx1 1xxx |   32bits
++-----------+
+</code></pre></div></li>
+</ul></li>
+<li><p>Except the last byte, the first bit of each byte will be <code>1</code>. The remain 7 bits in these bytes and the remain 3 bits in the last byte will be used to store the value of the <code>Integer</code>, For example:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">    7 bits                  3 bits
++-----------+...........+-----------+
+| 1xxx xxxx | 1xxx xxxx | .... .xxx |
++-----------+...........+-----------+
+</code></pre></div>
+<p>The absolte value of <code>Integer</code> in the Two&#39;s Complement binary format will be grouped by 7, the LSB bits in front and the MSB in end.</p>
+
+<p>1 will be encoded to:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+| 0100 0001 |
++-----------+
+</code></pre></div>
+<p>-16 will be encoded to:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+-----------+
+| 1001 0000 | 0110 0000 |  
++-----------+-----------+
+</code></pre></div></li>
+</ul>
+
+<h3 id="toc_7">Blob</h3>
+
+<ul>
+<li><p><code>Blob</code> will be encoded into 2 parts. First part is the <code>length of Blob</code>, the second part is the binary data.</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+----------------+
+| length + data  |  
++----------------+
+</code></pre></div></li>
+</ul>
+
+<p>The length will be encoded like <code>Integer</code>, but there are two differents:</p>
+
+<ol>
+<li><p>The type information of <code>Blob</code> is <code>0x01</code> which will be encoded into the last byte:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">              0x10 + 4bits
++...........+-----------+
+| 1xxx xxxx | 0001 xxxx |
++...........+-----------+
+</code></pre></div></li>
+<li><p>There are 4 bits in the lat byte can be used to store the value of <code>length of Blob</code>.</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">                                     binary data
++-----------+...........+-----------+============+
+| 1xxx xxxx | 1xxx xxxx | 0001 xxxx |    data    |
++-----------+...........+-----------+============+
+</code></pre></div></li>
+</ol>
+
+<h3 id="toc_8">String</h3>
+
+<ul>
+<li><p><code>String</code> is also encoded into <code>length + data</code> like <code>Blob</code>.</p>
+
+<p>The type of <code>String</code> is <code>0x20</code>, it also will be encoded into the last byte of the encoded bytes of length.</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">              0x20 + 4 bits
++...........+-----------+
+| 1xxx xxxx | 0010 xxxx |
++...........+-----------+
+
++-----------+...........+-----------+============+
+| 1xxx xxxx | 1xxx xxxx | 0010 xxxx |    data    |
++-----------+...........+-----------+============+
+</code></pre></div></li>
+</ul>
+
+<h3 id="toc_9">Float</h3>
+
+<ul>
+<li><p>The <code>Float</code> type information will be encoded into the first byte, followed by bytes of the Float in the <code>IEEE-754</code> format, in <code>Big Endian</code>.</p>
+
+<p><code>Double</code> will be encoded into 9 bytes, <code>Single</code> will be 5 bytes.</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">  0x06        8 bytes
++-----------+===========+
+| 0000 0110 |    data   |  Double precision.
++-----------+===========+
+
+  0x07        4 bytes
++-----------+===========+
+| 0000 0111 |    data   |  Single precision.
++-----------+===========+
+</code></pre></div></li>
+</ul>
+
+<h3 id="toc_10">List</h3>
+
+<ul>
+<li><p>For encoding <code>List</code> and <code>Dict</code>, we define a <code>Closure</code> byte.</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+| 0000 0001 |   0x01, Closure
++-----------+
+</code></pre></div></li>
+<li><p>List type is encoded to one byte:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+| 0000 0010 |   0x02, List
++-----------+
+</code></pre></div></li>
+<li><p><code>List</code> type information will be encoded into the first byte, then following every element in <code>List</code>.</p>
+
+<p>The last byte is <code>Closure</code>.</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+| 0000 0010 | 
++-----------+----------------------------
+|          element 1                       
++----------------------------------------
+|          element 2                       
++----------------------------------------
+.    .    .
+.    .    .
+.    .    .
++----------------------------------------
+|          element N                       
++-----------+----------------------------
+| 0000 0001 | Closure
++-----------+
+</code></pre></div></li>
+</ul>
+
+<h3 id="toc_11">Dict</h3>
+
+<ul>
+<li><p>Dict type:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+| 0000 0011 |   0x03, Dict
++-----------+
+</code></pre></div></li>
+<li><p>Like <code>List</code>, the encoded data will begin with type information and end with <code>Closure</code>.</p>
+
+<p>The key and value of every Entry of the Dictionary will be encoded like following:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+| 0000 0011 | Dict
++-----------+----------------------------
+|            key 1   
++----------------------------------------
+|          value 1
++----------------------------------------
+|            key 2   
++----------------------------------------
+|          value 2
++----------------------------------------
+.    .    .
+.    .    .
+.    .    .
++----------------------------------------
+|            key N   
++----------------------------------------
+|          value N
++-----------+----------------------------
+| 0000 0001 | Closure
++-----------+
+</code></pre></div></li>
+</ul>
+
+<h3 id="toc_12">The values</h3>
+
+<ul>
+<li><p>The values.</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">typedef enum {
+    BIN_TYPE_CLOSURE                = 0x01, 
+    BIN_TYPE_LIST                   = 0x02,
+    BIN_TYPE_DICT                   = 0x03,
+    BIN_TYPE_BOOL                   = 0x04,     /* 0000 0100 T */
+    BIN_TYPE_BOOL_FALSE             = 0x05,     /* 0000 0101 F */
+
+    BIN_TYPE_FLOAT_DOUBLE           = 0x06,     /* 0010 0110   */
+    BIN_TYPE_FLOAT_SINGLE           = 0x07,     /* 0000 0111   */
+
+    BIN_TYPE_NULL                   = 0x0f,
+
+    BIN_TYPE_BLOB                   = 0x10,     /* 0001 xxxx   */
+    BIN_TYPE_STRING                 = 0x20,     /* 0010 xxxx   */
+
+    BIN_TYPE_INTEGER                = 0x40,     /* 010x xxxx + */
+    BIN_TYPE_INTEGER_NEGATIVE       = 0x60,     /* 011x xxxx - */
+} bin_type_t;
+</code></pre></div></li>
+</ul>
+
         </div>
         <div class="col-md-3">
           <div class="bs-sidebar hidden-print" role="complementary">
