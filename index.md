@@ -326,3 +326,16 @@ The length will be encoded like `Integer`, but there are two differents:
     
     #define BIN_INTEGER_SUBTYPE_MASK            0x03 << 3
     ```
+
+###Implemetation
+
+*   php: [https://github.com/binpack/binpack-php](https://github.com/binpack/binpack-php)
+
+*   Java: [https://github.com/binpack/binpack-java](https://github.com/binpack/binpack-java)
+
+*   others: TODO
+
+###performance
+
+*   Compared with msgpack, the implemetation of php, the data size after encoded almost the same, but the time is near 3/4.
+
