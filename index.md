@@ -122,6 +122,18 @@ Integer will be encoded into one or more bytes.
 
     The absolte value of `Integer` in the Two's Complement binary format will be grouped by 7, the LSB bits in front and the MSB in end.
 
+    ```c
+    // allocate buf
+    char *p = buf;
+    // 小于0x08的数值，编码到最后一个字节的后三位
+    while (num >= 0x08)
+    {
+        *p++ = 0x80 | num;
+        num >>= 7;
+    }
+    *p++ = type | num;
+    ```
+
     1 will be encoded to:
 
     ```
@@ -279,11 +291,11 @@ The length will be encoded like `Integer`, but there are two differents:
     +-----------+
     ```
 
-### The values
+### Some 
 
-*   The values.
+*   The types:
 
-    ```
+    ```c
     typedef enum {
         BIN_TYPE_CLOSURE	            = 0x01,	
         BIN_TYPE_LIST   	            = 0x02,
@@ -302,4 +314,15 @@ The length will be encoded like `Integer`, but there are two differents:
         BIN_TYPE_INTEGER 	            = 0x40,		/* 010x xxxx + */
         BIN_TYPE_INTEGER_NEGATIVE    	= 0x60,     /* 011x xxxx - */
     } bin_type_t;
+    ```
+
+*   The sub type of Integer:
+
+    ```c
+    #define BIN_INTEGER_TYPE_64                 0x00 << 3   // default implementation
+    #define BIN_INTEGER_TYPE_8                  0x01 << 3
+    #define BIN_INTEGER_TYPE_16                 0x02 << 3
+    #define BIN_INTEGER_TYPE_32                 0x03 << 3
+    
+    #define BIN_INTEGER_SUBTYPE_MASK            0x03 << 3
     ```
