@@ -205,7 +205,16 @@
 +-----------+...........+-----------+
 </code></pre></div>
 <p>The absolte value of <code>Integer</code> in the Two&#39;s Complement binary format will be grouped by 7, the LSB bits in front and the MSB in end.</p>
-
+<div class="highlight"><pre><code class="c language-c" data-lang="c"><span class="c1">// allocate buf</span>
+<span class="kt">char</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">buf</span><span class="p">;</span>
+<span class="c1">// 小于0x08的数值，编码到最后一个字节的后三位</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">num</span> <span class="o">&gt;=</span> <span class="mh">0x08</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="o">*</span><span class="n">p</span><span class="o">++</span> <span class="o">=</span> <span class="mh">0x80</span> <span class="o">|</span> <span class="n">num</span><span class="p">;</span>
+    <span class="n">num</span> <span class="o">&gt;&gt;=</span> <span class="mi">7</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="o">*</span><span class="n">p</span><span class="o">++</span> <span class="o">=</span> <span class="n">type</span> <span class="o">|</span> <span class="n">num</span><span class="p">;</span>
+</code></pre></div>
 <p>1 will be encoded to:</p>
 <div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
 | 0100 0001 |
@@ -349,28 +358,36 @@
 </code></pre></div></li>
 </ul>
 
-<h3 id="toc_12">The values</h3>
+<h3 id="toc_12">Some</h3>
 
 <ul>
-<li><p>The values.</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">typedef enum {
-    BIN_TYPE_CLOSURE                = 0x01, 
-    BIN_TYPE_LIST                   = 0x02,
-    BIN_TYPE_DICT                   = 0x03,
-    BIN_TYPE_BOOL                   = 0x04,     /* 0000 0100 T */
-    BIN_TYPE_BOOL_FALSE             = 0x05,     /* 0000 0101 F */
+<li><p>The types:</p>
+<div class="highlight"><pre><code class="c language-c" data-lang="c"><span class="k">typedef</span> <span class="k">enum</span> <span class="p">{</span>
+    <span class="n">BIN_TYPE_CLOSURE</span>                <span class="o">=</span> <span class="mh">0x01</span><span class="p">,</span> 
+    <span class="n">BIN_TYPE_LIST</span>                   <span class="o">=</span> <span class="mh">0x02</span><span class="p">,</span>
+    <span class="n">BIN_TYPE_DICT</span>                   <span class="o">=</span> <span class="mh">0x03</span><span class="p">,</span>
+    <span class="n">BIN_TYPE_BOOL</span>                   <span class="o">=</span> <span class="mh">0x04</span><span class="p">,</span>     <span class="cm">/* 0000 0100 T */</span>
+    <span class="n">BIN_TYPE_BOOL_FALSE</span>             <span class="o">=</span> <span class="mh">0x05</span><span class="p">,</span>     <span class="cm">/* 0000 0101 F */</span>
 
-    BIN_TYPE_FLOAT_DOUBLE           = 0x06,     /* 0010 0110   */
-    BIN_TYPE_FLOAT_SINGLE           = 0x07,     /* 0000 0111   */
+    <span class="n">BIN_TYPE_FLOAT_DOUBLE</span>           <span class="o">=</span> <span class="mh">0x06</span><span class="p">,</span>     <span class="cm">/* 0010 0110   */</span>
+    <span class="n">BIN_TYPE_FLOAT_SINGLE</span>           <span class="o">=</span> <span class="mh">0x07</span><span class="p">,</span>     <span class="cm">/* 0000 0111   */</span>
 
-    BIN_TYPE_NULL                   = 0x0f,
+    <span class="n">BIN_TYPE_NULL</span>                   <span class="o">=</span> <span class="mh">0x0f</span><span class="p">,</span>
 
-    BIN_TYPE_BLOB                   = 0x10,     /* 0001 xxxx   */
-    BIN_TYPE_STRING                 = 0x20,     /* 0010 xxxx   */
+    <span class="n">BIN_TYPE_BLOB</span>                   <span class="o">=</span> <span class="mh">0x10</span><span class="p">,</span>     <span class="cm">/* 0001 xxxx   */</span>
+    <span class="n">BIN_TYPE_STRING</span>                 <span class="o">=</span> <span class="mh">0x20</span><span class="p">,</span>     <span class="cm">/* 0010 xxxx   */</span>
 
-    BIN_TYPE_INTEGER                = 0x40,     /* 010x xxxx + */
-    BIN_TYPE_INTEGER_NEGATIVE       = 0x60,     /* 011x xxxx - */
-} bin_type_t;
+    <span class="n">BIN_TYPE_INTEGER</span>                <span class="o">=</span> <span class="mh">0x40</span><span class="p">,</span>     <span class="cm">/* 010x xxxx + */</span>
+    <span class="n">BIN_TYPE_INTEGER_NEGATIVE</span>       <span class="o">=</span> <span class="mh">0x60</span><span class="p">,</span>     <span class="cm">/* 011x xxxx - */</span>
+<span class="p">}</span> <span class="kt">bin_type_t</span><span class="p">;</span>
+</code></pre></div></li>
+<li><p>The sub type of Integer:</p>
+<div class="highlight"><pre><code class="c language-c" data-lang="c"><span class="cp">#define BIN_INTEGER_TYPE_64                 0x00 &lt;&lt; 3   </span><span class="c1">// default implementation</span>
+<span class="cp">#define BIN_INTEGER_TYPE_8                  0x01 &lt;&lt; 3</span>
+<span class="cp">#define BIN_INTEGER_TYPE_16                 0x02 &lt;&lt; 3</span>
+<span class="cp">#define BIN_INTEGER_TYPE_32                 0x03 &lt;&lt; 3</span>
+
+<span class="cp">#define BIN_INTEGER_SUBTYPE_MASK            0x03 &lt;&lt; 3</span>
 </code></pre></div></li>
 </ul>
 
