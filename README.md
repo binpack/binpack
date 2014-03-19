@@ -1,4 +1,4 @@
 binpack
 =======
 
-Please visit [binpack.liaohuqiu.net](binpack.liaohuqiu.net)
+Please visit [http://binpack.liaohuqiu.net/](http://binpack.liaohuqiu.net/)
