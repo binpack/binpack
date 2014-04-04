@@ -207,7 +207,7 @@
 <p>The absolte value of <code>Integer</code> in the Two&#39;s Complement binary format will be grouped by 7, the LSB bits in front and the MSB in end.</p>
 <div class="highlight"><pre><code class="c language-c" data-lang="c"><span class="c1">// allocate buf</span>
 <span class="kt">char</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">buf</span><span class="p">;</span>
-<span class="c1">// 小于0x08的数值，编码到最后一个字节的后三位</span>
+<span class="c1">// pack</span>
 <span class="k">while</span> <span class="p">(</span><span class="n">num</span> <span class="o">&gt;=</span> <span class="mh">0x08</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="o">*</span><span class="n">p</span><span class="o">++</span> <span class="o">=</span> <span class="mh">0x80</span> <span class="o">|</span> <span class="n">num</span><span class="p">;</span>
