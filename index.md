@@ -125,7 +125,7 @@ Integer will be encoded into one or more bytes.
     ```c
     // allocate buf
     char *p = buf;
-    // 小于0x08的数值，编码到最后一个字节的后三位
+    // pack
     while (num >= 0x08)
     {
         *p++ = 0x80 | num;
