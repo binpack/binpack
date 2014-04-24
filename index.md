@@ -1,7 +1,7 @@
 ---
 layout:         "default"
 title:          "BinPack"
-lead:           "Most fast, json like"
+lead:           "Most Fast / Refined"
 ---
 
 #BinPack
@@ -337,5 +337,5 @@ The length will be encoded like `Integer`, but there are two differents:
 
 ###performance
 
-*   Compared with msgpack, the implemetation of php, the data size after encoded almost the same, but the time is near 3/4.
+*   Compared with msgpack, the implemetation of php, the data size after encoded almost the same, but the time is nearly 3/4.
 
