@@ -63,7 +63,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="/" class="navbar-brand">BinPack</a>
+            <a href="" class="navbar-brand"></a>
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">
@@ -106,32 +106,12 @@
 <ul>
 <li>  Null</li>
 <li>  Bool</li>
-<li><p><a href="http://en.wikipedia.org/wiki/Integer_%28computer_science%29">Integer</a></p>
-
-<ul>
-<li>8 bit</li>
-<li>16 bit</li>
-<li>32 bit</li>
-<li>64 bit</li>
-</ul></li>
-<li><p>Blob</p>
-
-<ul>
-<li>Binnay Buffer</li>
-</ul></li>
-<li><p>String</p></li>
-<li><p>Float</p>
-
-<ul>
-<li>Single</li>
-<li>Double</li>
-</ul></li>
-<li><p>List</p></li>
-<li><p>Dict</p>
-
-<ul>
-<li>Dictionary</li>
-</ul></li>
+<li>  <a href="http://en.wikipedia.org/wiki/Integer_%28computer_science%29">Integer</a></li>
+<li>  Blob</li>
+<li>  String</li>
+<li>  Float:  Single and Double pecision</li>
+<li>  List</li>
+<li>  Dict, Key value data set.</li>
 </ul>
 
 <h1 id="toc_3">Encoding</h1>
@@ -170,7 +150,7 @@
 <ul>
 <li><p>The last byte is used to store the type and sign information of the Integer.</p>
 
-<p>The type and sign information is encode into the first 3 bits, and the following 2 bits for data length:</p>
+<p>The type and sign information is encode into the first 3 bits:</p>
 
 <ul>
 <li><p><code>positive</code></p>
@@ -183,25 +163,11 @@
 | 011x xxxx |  0x60
 +-----------+
 </code></pre></div></li>
-<li><p><code>data length</code></p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
-| xxx0 0xxx |   64bits
-+-----------+
-+-----------+
-| xxx0 1xxx |   8bits
-+-----------+
-+-----------+
-| xxx1 0xxx |   16bits
-+-----------+
-+-----------+
-| xxx1 1xxx |   32bits
-+-----------+
-</code></pre></div></li>
 </ul></li>
-<li><p>Except the last byte, the first bit of each byte will be <code>1</code>. The remain 7 bits in these bytes and the remain 3 bits in the last byte will be used to store the value of the <code>Integer</code>, For example:</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">    7 bits                  3 bits
+<li><p>Except the last byte, the first bit of each byte will be <code>1</code>. The remain 7 bits in these bytes and the remain 5 bits in the last byte will be used to store the value of the <code>Integer</code>, For example:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">    7 bits                  5 bits
 +-----------+...........+-----------+
-| 1xxx xxxx | 1xxx xxxx | .... .xxx |
+| 1xxx xxxx | 1xxx xxxx | ...x xxxx |
 +-----------+...........+-----------+
 </code></pre></div>
 <p>The absolte value of <code>Integer</code> in the Two&#39;s Complement binary format will be grouped by 7, the LSB bits in front and the MSB in end.</p>
@@ -363,7 +329,7 @@
 <ul>
 <li><p>The types:</p>
 <div class="highlight"><pre><code class="c language-c" data-lang="c"><span class="k">typedef</span> <span class="k">enum</span> <span class="p">{</span>
-    <span class="n">BIN_TYPE_CLOSURE</span>                <span class="o">=</span> <span class="mh">0x01</span><span class="p">,</span> 
+    <span class="n">BIN_TYPE_CLOSURE</span>                <span class="o">=</span> <span class="mh">0x01</span><span class="p">,</span>
     <span class="n">BIN_TYPE_LIST</span>                   <span class="o">=</span> <span class="mh">0x02</span><span class="p">,</span>
     <span class="n">BIN_TYPE_DICT</span>                   <span class="o">=</span> <span class="mh">0x03</span><span class="p">,</span>
     <span class="n">BIN_TYPE_BOOL</span>                   <span class="o">=</span> <span class="mh">0x04</span><span class="p">,</span>     <span class="cm">/* 0000 0100 T */</span>
@@ -378,24 +344,17 @@
     <span class="n">BIN_TYPE_STRING</span>                 <span class="o">=</span> <span class="mh">0x20</span><span class="p">,</span>     <span class="cm">/* 0010 xxxx   */</span>
 
     <span class="n">BIN_TYPE_INTEGER</span>                <span class="o">=</span> <span class="mh">0x40</span><span class="p">,</span>     <span class="cm">/* 010x xxxx + */</span>
-    <span class="n">BIN_TYPE_INTEGER_NEGATIVE</span>       <span class="o">=</span> <span class="mh">0x60</span><span class="p">,</span>     <span class="cm">/* 011x xxxx - */</span>
+    <span class="n">BIN_TYPE_INTEGER_NEGATIVE</span>       <span class="o">=</span> <span class="mh">0x60</span>      <span class="cm">/* 011x xxxx - */</span>
 <span class="p">}</span> <span class="kt">bin_type_t</span><span class="p">;</span>
-</code></pre></div></li>
-<li><p>The sub type of Integer:</p>
-<div class="highlight"><pre><code class="c language-c" data-lang="c"><span class="cp">#define BIN_INTEGER_TYPE_64                 0x00 &lt;&lt; 3   </span><span class="c1">// default implementation</span>
-<span class="cp">#define BIN_INTEGER_TYPE_8                  0x01 &lt;&lt; 3</span>
-<span class="cp">#define BIN_INTEGER_TYPE_16                 0x02 &lt;&lt; 3</span>
-<span class="cp">#define BIN_INTEGER_TYPE_32                 0x03 &lt;&lt; 3</span>
-
-<span class="cp">#define BIN_INTEGER_SUBTYPE_MASK            0x03 &lt;&lt; 3</span>
 </code></pre></div></li>
 </ul>
 
 <h3 id="toc_13">Implemetation</h3>
 
 <ul>
-<li><p>php: <a href="https://github.com/binpack/binpack-php">https://github.com/binpack/binpack-php</a></p></li>
-<li><p>Java: <a href="https://github.com/binpack/binpack-java">https://github.com/binpack/binpack-java</a></p></li>
+<li><p>php: <a href="https://github.com/binpack/binpack-php">https://github.com/binpack/binpack-php</a> @2014 May 9</p></li>
+<li><p>Java: <a href="https://github.com/binpack/binpack-java">https://github.com/binpack/binpack-java</a> @2014 May 9</p></li>
+<li><p>Python: <a href="https://github.com/binpack/binpack-pthon">https://github.com/binpack/binpack-java</a> @2014 June 13</p></li>
 <li><p>others: TODO</p></li>
 </ul>
 
