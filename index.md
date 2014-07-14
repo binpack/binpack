@@ -17,27 +17,11 @@ lead:           "Most Fast / Refined"
 *   Null
 *   Bool
 *   [Integer](http://en.wikipedia.org/wiki/Integer_%28computer_science%29)
-    
-    * 8 bit
-    * 16 bit
-    * 32 bit
-    * 64 bit
-
 *   Blob
-    
-    * Binnay Buffer
-
 *   String
-
-*   Float
-
-    * Single
-    * Double
-
+*   Float:  Single and Double pecision
 *   List
-*   Dict
-
-    * Dictionary
+*   Dict, Key value data set.
 
 #Encoding
 ---
@@ -76,7 +60,7 @@ Integer will be encoded into one or more bytes.
 
 * The last byte is used to store the type and sign information of the Integer.
 
-    The type and sign information is encode into the first 3 bits, and the following 2 bits for data length:
+    The type and sign information is encode into the first 3 bits:
 
     *   `positive`
     
@@ -94,29 +78,12 @@ Integer will be encoded into one or more bytes.
         +-----------+
         ```
     
-    *   `data length`
-    
-        ```
-        +-----------+
-        | xxx0 0xxx |   64bits
-        +-----------+
-        +-----------+
-        | xxx0 1xxx |   8bits
-        +-----------+
-        +-----------+
-        | xxx1 0xxx |   16bits
-        +-----------+
-        +-----------+
-        | xxx1 1xxx |   32bits
-        +-----------+
-        ```
-    
-* Except the last byte, the first bit of each byte will be `1`. The remain 7 bits in these bytes and the remain 3 bits in the last byte will be used to store the value of the `Integer`, For example:
+* Except the last byte, the first bit of each byte will be `1`. The remain 7 bits in these bytes and the remain 5 bits in the last byte will be used to store the value of the `Integer`, For example:
 
     ```
-        7 bits                  3 bits
+        7 bits                  5 bits
     +-----------+...........+-----------+
-    | 1xxx xxxx | 1xxx xxxx | .... .xxx |
+    | 1xxx xxxx | 1xxx xxxx | ...x xxxx |
     +-----------+...........+-----------+
     ```
 
@@ -297,41 +264,32 @@ The length will be encoded like `Integer`, but there are two differents:
 
     ```c
     typedef enum {
-        BIN_TYPE_CLOSURE	            = 0x01,	
+        BIN_TYPE_CLOSURE	            = 0x01,
         BIN_TYPE_LIST   	            = 0x02,
         BIN_TYPE_DICT   	            = 0x03,
         BIN_TYPE_BOOL   	            = 0x04,     /* 0000 0100 T */
         BIN_TYPE_BOOL_FALSE             = 0x05,     /* 0000 0101 F */
-
+        
         BIN_TYPE_FLOAT_DOUBLE           = 0x06,     /* 0010 0110   */
         BIN_TYPE_FLOAT_SINGLE           = 0x07,     /* 0000 0111   */
-
+        
         BIN_TYPE_NULL   	            = 0x0f,
-
+        
         BIN_TYPE_BLOB   	            = 0x10,		/* 0001 xxxx   */
         BIN_TYPE_STRING   	            = 0x20,		/* 0010 xxxx   */
-
+        
         BIN_TYPE_INTEGER 	            = 0x40,		/* 010x xxxx + */
-        BIN_TYPE_INTEGER_NEGATIVE    	= 0x60,     /* 011x xxxx - */
+        BIN_TYPE_INTEGER_NEGATIVE    	= 0x60      /* 011x xxxx - */
     } bin_type_t;
-    ```
-
-*   The sub type of Integer:
-
-    ```c
-    #define BIN_INTEGER_TYPE_64                 0x00 << 3   // default implementation
-    #define BIN_INTEGER_TYPE_8                  0x01 << 3
-    #define BIN_INTEGER_TYPE_16                 0x02 << 3
-    #define BIN_INTEGER_TYPE_32                 0x03 << 3
-    
-    #define BIN_INTEGER_SUBTYPE_MASK            0x03 << 3
     ```
 
 ###Implemetation
 
-*   php: [https://github.com/binpack/binpack-php](https://github.com/binpack/binpack-php)
+*   php: [https://github.com/binpack/binpack-php](https://github.com/binpack/binpack-php) @2014 May 9
 
-*   Java: [https://github.com/binpack/binpack-java](https://github.com/binpack/binpack-java)
+*   Java: [https://github.com/binpack/binpack-java](https://github.com/binpack/binpack-java) @2014 May 9
+
+*   Python: [https://github.com/binpack/binpack-java](https://github.com/binpack/binpack-pthon) @2014 June 13
 
 *   others: TODO
 
