@@ -26,6 +26,8 @@ meta:
   keywords:         "binpack, binary serialize, binary deserialize"
   author:           "liaohuqiu@gmail.com"
 
+gems:           ['jekyll-multiple-languages']
+
 # multiple language
 language_default:   'en'
 
