@@ -63,7 +63,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="" class="navbar-brand"></a>
+            <a href="/" class="navbar-brand">BinPack</a>
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav">
@@ -85,7 +85,7 @@
     <div class="bs-header" id="content">
       <div class="container">
         <h1>BinPack</h1>
-        <p>Most Fast / Refined</p>
+        <p>Fastest / Refined</p>
       </div>
     </div>
 
@@ -93,15 +93,15 @@
 
       <div class="row">
         <div class="col-md-9" role="main">
-          <h1 id="toc_0">BinPack</h1>
+          <h1 id="binpack">BinPack</h1>
 
 <hr>
 
-<h3 id="toc_1">what is it</h3>
+<h3 id="what-is-it">what is it</h3>
 
 <p><code>Binpack</code> is a binary serialize format, it is json like, but smaller and faster.</p>
 
-<h3 id="toc_2">Support data format</h3>
+<h3 id="support-data-format">Support data format</h3>
 
 <ul>
 <li>  Null</li>
@@ -114,36 +114,36 @@
 <li>  Dict, Key value data set.</li>
 </ul>
 
-<h1 id="toc_3">Encoding</h1>
+<h1 id="encoding">Encoding</h1>
 
 <hr>
 
-<h3 id="toc_4">Null</h3>
+<h3 id="null">Null</h3>
 
 <ul>
 <li><p>Encode into one byte</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+-----------+
 | 0000 1111 |   0x0f
 +-----------+
 </code></pre></div></li>
 </ul>
 
-<h3 id="toc_5">Bool</h3>
+<h3 id="bool">Bool</h3>
 
 <ul>
 <li><p><code>true</code></p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+-----------+
 | 0000 0100 |   0x04
 +-----------+
 </code></pre></div></li>
 <li><p><code>false</code></p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+-----------+
 | 0000 0101 |   0x05
 +-----------+
 </code></pre></div></li>
 </ul>
 
-<h3 id="toc_6">Integer</h3>
+<h3 id="integer">Integer</h3>
 
 <p>Integer will be encoded into one or more bytes.</p>
 
@@ -154,24 +154,24 @@
 
 <ul>
 <li><p><code>positive</code></p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+-----------+
 | 010x xxxx |  0x40
 +-----------+
 </code></pre></div></li>
 <li><p><code>negative</code></p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+-----------+
 | 011x xxxx |  0x60
 +-----------+
 </code></pre></div></li>
 </ul></li>
 <li><p>Except the last byte, the first bit of each byte will be <code>1</code>. The remain 7 bits in these bytes and the remain 5 bits in the last byte will be used to store the value of the <code>Integer</code>, For example:</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">    7 bits                  5 bits
+<div class="highlight"><pre><code class="language-text" data-lang="text">    7 bits                  5 bits
 +-----------+...........+-----------+
 | 1xxx xxxx | 1xxx xxxx | ...x xxxx |
 +-----------+...........+-----------+
 </code></pre></div>
 <p>The absolte value of <code>Integer</code> in the Two&#39;s Complement binary format will be grouped by 7, the LSB bits in front and the MSB in end.</p>
-<div class="highlight"><pre><code class="c language-c" data-lang="c"><span class="c1">// allocate buf</span>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="c1">// allocate buf</span>
 <span class="kt">char</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">buf</span><span class="p">;</span>
 <span class="c1">// pack</span>
 <span class="k">while</span> <span class="p">(</span><span class="n">num</span> <span class="o">&gt;=</span> <span class="mh">0x08</span><span class="p">)</span>
@@ -182,22 +182,22 @@
 <span class="o">*</span><span class="n">p</span><span class="o">++</span> <span class="o">=</span> <span class="n">type</span> <span class="o">|</span> <span class="n">num</span><span class="p">;</span>
 </code></pre></div>
 <p>1 will be encoded to:</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+-----------+
 | 0100 0001 |
 +-----------+
 </code></pre></div>
 <p>-16 will be encoded to:</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+-----------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+-----------+-----------+
 | 1001 0000 | 0110 0000 |  
 +-----------+-----------+
 </code></pre></div></li>
 </ul>
 
-<h3 id="toc_7">Blob</h3>
+<h3 id="blob">Blob</h3>
 
 <ul>
 <li><p><code>Blob</code> will be encoded into 2 parts. First part is the <code>length of Blob</code>, the second part is the binary data.</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+----------------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+----------------+
 | length + data  |  
 +----------------+
 </code></pre></div></li>
@@ -207,26 +207,26 @@
 
 <ol>
 <li><p>The type information of <code>Blob</code> is <code>0x01</code> which will be encoded into the last byte:</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">              0x10 + 4bits
+<div class="highlight"><pre><code class="language-text" data-lang="text">              0x10 + 4bits
 +...........+-----------+
 | 1xxx xxxx | 0001 xxxx |
 +...........+-----------+
 </code></pre></div></li>
 <li><p>There are 4 bits in the lat byte can be used to store the value of <code>length of Blob</code>.</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">                                     binary data
+<div class="highlight"><pre><code class="language-text" data-lang="text">                                     binary data
 +-----------+...........+-----------+============+
 | 1xxx xxxx | 1xxx xxxx | 0001 xxxx |    data    |
 +-----------+...........+-----------+============+
 </code></pre></div></li>
 </ol>
 
-<h3 id="toc_8">String</h3>
+<h3 id="string">String</h3>
 
 <ul>
 <li><p><code>String</code> is also encoded into <code>length + data</code> like <code>Blob</code>.</p>
 
 <p>The type of <code>String</code> is <code>0x20</code>, it also will be encoded into the last byte of the encoded bytes of length.</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">              0x20 + 4 bits
+<div class="highlight"><pre><code class="language-text" data-lang="text">              0x20 + 4 bits
 +...........+-----------+
 | 1xxx xxxx | 0010 xxxx |
 +...........+-----------+
@@ -237,13 +237,13 @@
 </code></pre></div></li>
 </ul>
 
-<h3 id="toc_9">Float</h3>
+<h3 id="float">Float</h3>
 
 <ul>
 <li><p>The <code>Float</code> type information will be encoded into the first byte, followed by bytes of the Float in the <code>IEEE-754</code> format, in <code>Big Endian</code>.</p>
 
 <p><code>Double</code> will be encoded into 9 bytes, <code>Single</code> will be 5 bytes.</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">  0x06        8 bytes
+<div class="highlight"><pre><code class="language-text" data-lang="text">  0x06        8 bytes
 +-----------+===========+
 | 0000 0110 |    data   |  Double precision.
 +-----------+===========+
@@ -255,23 +255,23 @@
 </code></pre></div></li>
 </ul>
 
-<h3 id="toc_10">List</h3>
+<h3 id="list">List</h3>
 
 <ul>
 <li><p>For encoding <code>List</code> and <code>Dict</code>, we define a <code>Closure</code> byte.</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+-----------+
 | 0000 0001 |   0x01, Closure
 +-----------+
 </code></pre></div></li>
 <li><p>List type is encoded to one byte:</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+-----------+
 | 0000 0010 |   0x02, List
 +-----------+
 </code></pre></div></li>
 <li><p><code>List</code> type information will be encoded into the first byte, then following every element in <code>List</code>.</p>
 
 <p>The last byte is <code>Closure</code>.</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+-----------+
 | 0000 0010 | 
 +-----------+----------------------------
 |          element 1                       
@@ -289,18 +289,18 @@
 </code></pre></div></li>
 </ul>
 
-<h3 id="toc_11">Dict</h3>
+<h3 id="dict">Dict</h3>
 
 <ul>
 <li><p>Dict type:</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+-----------+
 | 0000 0011 |   0x03, Dict
 +-----------+
 </code></pre></div></li>
 <li><p>Like <code>List</code>, the encoded data will begin with type information and end with <code>Closure</code>.</p>
 
 <p>The key and value of every Entry of the Dictionary will be encoded like following:</p>
-<div class="highlight"><pre><code class="text language-text" data-lang="text">+-----------+
+<div class="highlight"><pre><code class="language-text" data-lang="text">+-----------+
 | 0000 0011 | Dict
 +-----------+----------------------------
 |            key 1   
@@ -324,11 +324,11 @@
 </code></pre></div></li>
 </ul>
 
-<h3 id="toc_12">Some</h3>
+<h3 id="some">Some</h3>
 
 <ul>
 <li><p>The types:</p>
-<div class="highlight"><pre><code class="c language-c" data-lang="c"><span class="k">typedef</span> <span class="k">enum</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="language-c" data-lang="c"><span class="k">typedef</span> <span class="k">enum</span> <span class="p">{</span>
     <span class="n">BIN_TYPE_CLOSURE</span>                <span class="o">=</span> <span class="mh">0x01</span><span class="p">,</span>
     <span class="n">BIN_TYPE_LIST</span>                   <span class="o">=</span> <span class="mh">0x02</span><span class="p">,</span>
     <span class="n">BIN_TYPE_DICT</span>                   <span class="o">=</span> <span class="mh">0x03</span><span class="p">,</span>
@@ -349,7 +349,7 @@
 </code></pre></div></li>
 </ul>
 
-<h3 id="toc_13">Implemetation</h3>
+<h3 id="implemetation">Implemetation</h3>
 
 <ul>
 <li><p>php: <a href="https://github.com/binpack/binpack-php">https://github.com/binpack/binpack-php</a> @2014 May 9</p></li>
@@ -358,7 +358,7 @@
 <li><p>others: TODO</p></li>
 </ul>
 
-<h3 id="toc_14">performance</h3>
+<h3 id="performance">performance</h3>
 
 <ul>
 <li>  Compared with msgpack, the implemetation of php, the data size after encoded almost the same, but the time is nearly 3/4.</li>
